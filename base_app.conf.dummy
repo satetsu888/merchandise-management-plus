@@ -1,0 +1,5 @@
++{
+    client_id     => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    client_secret => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    redirect_uri  => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+};
