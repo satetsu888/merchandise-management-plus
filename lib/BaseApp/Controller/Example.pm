@@ -6,13 +6,11 @@ use URI::QueryParam;
 use JSON;
 use LWP::UserAgent;
 
-
 use constant {
     AUTH_ENDPOINT  => 'https://api.thebase.in/1/oauth/authorize',
     TOKEN_ENDPOINT => 'https://api.thebase.in/1/oauth/token',
 };
 
-# This action will render a template
 sub welcome {
   my $self = shift;
   my $config = $self->config;
@@ -28,7 +26,6 @@ sub welcome {
   });
 
   $self->redirect_to($auth_uri->as_string);
-
 }
 
 sub callback {
@@ -49,8 +46,8 @@ sub callback {
   my $ua = LWP::UserAgent->new;
   my $response = $ua->post($token_uri->as_string, $post_params);
   my $token = decode_json($response->content);
+  $self->psession->{token} = $token;
 
-  # Render template "example/welcome.html.ep" with message
   $self->render(
       code => $self->param('code'),
       msg  => 'コールバックページ',

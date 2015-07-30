@@ -10,6 +10,14 @@ sub startup {
 
   $self->plugin('Config');
 
+  $self->helper(
+      psession => sub {
+          my $self = shift;
+          my $env = $self->req->env;
+          return $env->{'psgix.session'};
+      }
+  );
+
   # Router
   my $r = $self->routes;
 
@@ -17,5 +25,6 @@ sub startup {
   $r->get('/')->to('example#welcome');
   $r->get('/callback')->to('example#callback');
 }
+
 
 1;
