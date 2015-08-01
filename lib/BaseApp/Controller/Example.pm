@@ -1,31 +1,14 @@
 package BaseApp::Controller::Example;
 use Mojo::Base 'Mojolicious::Controller';
 
-use URI;
-use URI::QueryParam;
-use JSON;
-use LWP::UserAgent;
-
-use constant {
-    AUTH_ENDPOINT  => 'https://api.thebase.in/1/oauth/authorize',
-    TOKEN_ENDPOINT => 'https://api.thebase.in/1/oauth/token',
-};
+use Net::OAuth2::Client;
+use Net::OAuth2::Profile::WebServer;
 
 sub welcome {
   my $self = shift;
   my $config = $self->config;
 
-
-  my $auth_uri = URI->new(AUTH_ENDPOINT);
-  $auth_uri->query_form({
-    response_type => 'code',
-    client_id     => $config->{client_id},
-    redirect_uri  => $config->{redirect_uri},
-    scope         => 'read_items write_items',
-    state         => 'state',
-  });
-
-  $self->redirect_to($auth_uri->as_string);
+  $self->redirect_to($self->_auth->authorize);
 }
 
 sub callback {
@@ -34,24 +17,27 @@ sub callback {
 
   my $code = $self->param('code');
 
-  my $token_uri = URI->new(TOKEN_ENDPOINT);
-  my $post_params = +{
-    grant_type    => 'authorization_code',
-    client_id     => $config->{client_id},
-    client_secret => $config->{client_secret},
-    code          => $code,
-    redirect_uri  => $config->{redirect_uri},
-  };
-
-  my $ua = LWP::UserAgent->new;
-  my $response = $ua->post($token_uri->as_string, $post_params);
-  my $token = decode_json($response->content);
-  $self->psession->{token} = $token;
+  my $token  = $self->_auth->get_access_token($self->param('code'));
+  $self->psession->{token} = $token->session_freeze;
 
   $self->render(
       code => $self->param('code'),
       msg  => 'コールバックページ',
   );
+}
+
+sub _auth {
+    my $self = shift;
+    return Net::OAuth2::Profile::WebServer->new(
+        name           => 'Google Contacts',
+        client_id      => $self->config->{client_id},
+        client_secret  => $self->config->{client_secret},
+        redirect_uri   => $self->config->{redirect_uri},
+        site           => 'https://api.thebase.in/',
+        scope          => 'read_items write_items',
+        authorize_path    => '/1/oauth/authorize',
+        access_token_path => '/1/oauth/token',
+    );
 }
 
 1;
