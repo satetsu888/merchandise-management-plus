@@ -48,7 +48,7 @@ sub main {
 sub _auth {
     my $self = shift;
     return Net::OAuth2::Profile::WebServer->new(
-        name           => 'Google Contacts',
+        name           => 'BASE API Client',
         client_id      => $self->config->{client_id},
         client_secret  => $self->config->{client_secret},
         redirect_uri   => $self->config->{redirect_uri},
