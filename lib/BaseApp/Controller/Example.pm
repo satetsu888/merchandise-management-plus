@@ -1,6 +1,7 @@
 package BaseApp::Controller::Example;
 use Mojo::Base 'Mojolicious::Controller';
 
+use JSON;
 use Net::OAuth2::Client;
 use Net::OAuth2::AccessToken;
 use Net::OAuth2::Profile::WebServer;
@@ -39,8 +40,13 @@ sub callback {
 sub main {
     my $self = shift;
 
+    my $token = Net::OAuth2::AccessToken->session_thaw($self->psession->{token}, profile => $self->_auth);
+
+    my $items = $token->get('/1/items')->content;
+
     $self->render(
-        msg  => 'メインページ',
+        msg   => 'メインページ',
+        items => decode_json($items),
     );
 
 }
@@ -54,8 +60,9 @@ sub _auth {
         redirect_uri   => $self->config->{redirect_uri},
         site           => 'https://api.thebase.in/',
         scope          => 'read_items write_items',
-        authorize_path    => '/1/oauth/authorize',
-        access_token_path => '/1/oauth/token',
+        authorize_path     => '/1/oauth/authorize',
+        access_token_path  => '/1/oauth/token',
+        refresh_token_path => '/1/oauth/token',
     );
 }
 
@@ -73,7 +80,7 @@ sub _has_valid_token {
 
     if($token->expired){
         warn "token expired";
-        $token = $token->refresh();
+        $token->refresh;
     };
     return 0 unless $token;
 
