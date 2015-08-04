@@ -12,7 +12,7 @@ sub welcome {
     if($self->_has_valid_token){
         $self->redirect_to($self->req->url->base.'/main');
     } else {
-        $self->redirect_to($self->_auth->authorize);
+        $self->redirect_to($self->auth->authorize);
     }
 }
 
@@ -31,7 +31,7 @@ sub callback {
         return;
     }
 
-    my $token  = $self->_auth->get_access_token($code);
+    my $token  = $self->auth->get_access_token($code);
     $self->psession->{token} = $token->session_freeze;
 
     $self->redirect_to($self->req->url->base.'/');
@@ -40,7 +40,7 @@ sub callback {
 sub main {
     my $self = shift;
 
-    my $token = Net::OAuth2::AccessToken->session_thaw($self->psession->{token}, profile => $self->_auth);
+    my $token = Net::OAuth2::AccessToken->session_thaw($self->psession->{token}, profile => $self->auth);
 
     my $items = $token->get('/1/items')->content;
 
@@ -49,21 +49,6 @@ sub main {
         items => decode_json($items),
     );
 
-}
-
-sub _auth {
-    my $self = shift;
-    return Net::OAuth2::Profile::WebServer->new(
-        name           => 'BASE API Client',
-        client_id      => $self->config->{client_id},
-        client_secret  => $self->config->{client_secret},
-        redirect_uri   => $self->config->{redirect_uri},
-        site           => 'https://api.thebase.in/',
-        scope          => 'read_items write_items',
-        authorize_path     => '/1/oauth/authorize',
-        access_token_path  => '/1/oauth/token',
-        refresh_token_path => '/1/oauth/token',
-    );
 }
 
 sub _has_valid_token {
@@ -75,7 +60,7 @@ sub _has_valid_token {
     my $token_data = $self->psession->{token};
     return 0 unless $token_data;
 
-    my $token = Net::OAuth2::AccessToken->session_thaw($token_data, profile => $self->_auth);
+    my $token = Net::OAuth2::AccessToken->session_thaw($token_data, profile => $self->auth);
     return 0 unless $token;
 
     if($token->expired){

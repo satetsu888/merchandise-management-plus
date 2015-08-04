@@ -1,3 +1,12 @@
 % layout 'default';
 % title '商品管理＋';
 <h2><%= $msg %></h2>
+
+<div class="items">
+</div>
+
+%= javascript "js/jquery-2.1.4.min.js";
+%= javascript "js/jquery.jsonrpc.js";
+%= javascript "js/vue.min.js";
+%= javascript 'js/items.js';
+
