@@ -2,7 +2,18 @@
 % title '商品管理＋';
 <h2><%= $msg %></h2>
 
-<div class="items">
+<div id="itemList">
+    <template v-repeat="items">
+    <div>
+        <ul>
+            <li>item_id: {{item_id}}</li>
+            <li>title: <input type="text" v-model="title"></li>
+            <li><img src={{img1_origin}}></li>
+            <li>price:￥<input type="text" v-model="price"></li>
+            <li>stock: <input type="text" v-model="stock"></li>
+        </ul>
+        </div>
+    </template>
 </div>
 
 %= javascript "js/jquery-2.1.4.min.js";

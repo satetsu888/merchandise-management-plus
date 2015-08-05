@@ -2,17 +2,21 @@ $.jsonRPC.setup({
     endPoint: 'jsonrpc',
 });
 
-new Vue({
-    el: '.items',
+var vm = new Vue({
+    el: '#itemList',
+    data: {
+        items : [],
+    },
     ready: function(){
+        var self = this;
         $.jsonRPC.request('getItems',{
             params: {},
-            success: function(result){
-                this.$data = result;
+            success: function(res){
+                self.items = res.result.items.concat();
             },
-            error: function(result){
-                console.log(result);
+            error: function(res){
+                console.log(res);
             }
-        })
+        });
     }
 });
