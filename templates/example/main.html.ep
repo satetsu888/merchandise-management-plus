@@ -2,20 +2,29 @@
 % title '商品管理＋';
 <h2><%= $msg %></h2>
 
-<ul id="itemList">
+<ul id="itemList" class="accordion-group">
     <template v-repeat="items">
     <li class="item">
-        <div class="item-header">
-            <img src={{img1_origin}} width="50px">
-            {{title}}
+        <div class="accordion-header">
+            <a class="accordion-toggle" data-toggle="collapse" href="#item{{$index}}-body" >
+                <img src={{img1_origin}} width="50px">
+                {{title}}
+            </a>
+            <small>[{{item_id}}]</small>
         </div>
-        <div class="item-body">
+        <div id="item{{$index}}-body" class="accordion-body collapse">
             <div class="input-group">
                 <span class="input-group-addon">商品名</span>
                 <input type="text" class="form-control" placeholder="title" v-model="title">
             </div>
             <div class="input-group">
-                <img src={{img1_origin}} width="50px">
+                % for(1..5){
+                <div class="col-xs-6 col-md-3" v-if="img<%= $_ %>_origin">
+                    <a href="#" class="thumbnail">
+                        <img v-attr="src:img<%= $_ %>_origin" />
+                    </a>
+                </div>
+                % }
             </div>
             <div class="input-group">
                 <span class="input-group-addon">¥</span>
@@ -23,9 +32,6 @@
             </div>
             <div class="input-group">
                 <input type="text" v-model="stock">
-            </div>
-            <div class="input-group">
-                item_id: {{item_id}}
             </div>
         </div>
     </li>
