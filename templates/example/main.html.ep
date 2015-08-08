@@ -2,22 +2,35 @@
 % title '商品管理＋';
 <h2><%= $msg %></h2>
 
-<div id="itemList">
+<ul id="itemList">
     <template v-repeat="items">
-    <div>
-        <ul>
-            <li>item_id: {{item_id}}</li>
-            <li>title: <input type="text" v-model="title"></li>
-            <li><img src={{img1_origin}}></li>
-            <li>price:￥<input type="text" v-model="price"></li>
-            <li>stock: <input type="text" v-model="stock"></li>
-        </ul>
+    <li class="item">
+        <div class="item-header">
+            <img src={{img1_origin}} width="50px">
+            {{title}}
         </div>
+        <div class="item-body">
+            <div class="input-group">
+                <span class="input-group-addon">商品名</span>
+                <input type="text" class="form-control" placeholder="title" v-model="title">
+            </div>
+            <div class="input-group">
+                <img src={{img1_origin}} width="50px">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">¥</span>
+                <input type="text" v-model="price">
+            </div>
+            <div class="input-group">
+                <input type="text" v-model="stock">
+            </div>
+            <div class="input-group">
+                item_id: {{item_id}}
+            </div>
+        </div>
+    </li>
     </template>
-</div>
+</ul>
 
-%= javascript "js/jquery-2.1.4.min.js";
-%= javascript "js/jquery.jsonrpc.js";
-%= javascript "js/vue.min.js";
 %= javascript 'js/items.js';
 
