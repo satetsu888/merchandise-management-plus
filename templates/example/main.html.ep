@@ -2,6 +2,7 @@
 % title '商品管理＋';
 <h2><%= $msg %></h2>
 
+<div id="itemListWrapper">
 <ul id="itemList" class="accordion-group">
     <template v-repeat="items">
     <li class="item">
@@ -33,10 +34,21 @@
             <div class="input-group">
                 <input type="text" v-model="stock">
             </div>
+            <div class="input-group">
+                <ul>
+                <template v-repeat="variations">
+                    <li>
+                        {{variation}} : {{variation_stock}}
+                    </li>
+                </template>
+                </ul>
+            </div>
         </div>
     </li>
     </template>
 </ul>
+<input type="button" class="btn btn-primary" value="更新" v-on="click: updateItems">
+</div>
 
 %= javascript 'js/items.js';
 
