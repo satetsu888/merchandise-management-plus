@@ -5,7 +5,8 @@
 <div id="itemListWrapper">
 <ul id="itemList" class="accordion-group">
     <template v-repeat="items">
-    <li class="item">
+    <item-component v-item={{item}}>
+    <li class="item" >
         <div class="accordion-header">
             <a class="accordion-toggle" data-toggle="collapse" href="#item{{$index}}-body" >
                 <img src={{img1_origin}} width="50px">
@@ -42,7 +43,8 @@
                 <ul>
                 <template v-repeat="variations">
                     <li>
-                        {{variation}} : {{variation_stock}}
+                        <input type="text" v-model="variation">
+                        <input type="text" v-model="variation_stock">
                     </li>
                 </template>
                 </ul>
@@ -50,6 +52,7 @@
             <input type="button" class="btn btn-primary" value="更新" v-on="click: updateItem">
         </div>
     </li>
+    </item-component>
     </template>
 </ul>
 </div>

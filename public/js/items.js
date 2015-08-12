@@ -19,11 +19,11 @@ var getItems = function(vm){
     });
 }
 
-var setItem = function(item){
+var setItem = function(vm){
     $.jsonRPC.request('setItem',{
-        params: { data: item },
+        params: { data: vm.$data },
         success: function(res){
-            console.log(res);
+            vm.$data = res.result.item;
         },
         error: function(res){
             console.log(res);
@@ -42,7 +42,12 @@ var vm = new Vue({
     },
     methods: {
         updateItem: function(e){
-            setItem(e.targetVM.$data);
+            setItem(e.targetVM);
+        },
+    },
+    components: {
+        itemComponent: {
+            props: ['item'],
         },
     }
 });
