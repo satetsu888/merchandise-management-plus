@@ -56,7 +56,6 @@ sub setItem {
         @{flatten_variations($nested_variations)},
     };
 
-
     my $content = join '&', map {
         my $key = $_;
         my $value = $update_params->{$_} // '';

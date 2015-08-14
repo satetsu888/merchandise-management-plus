@@ -13,6 +13,7 @@
                 {{title}}
             </a>
             <small>[{{item_id}}]</small>
+            <input type="checkbox" value="表示" v-model="visible | asBool">表示
         </div>
         <div id="item{{$index}}-body" class="accordion-body collapse">
             <div class="input-group">
@@ -55,6 +56,7 @@
     </item-component>
     </template>
 </ul>
+    <a href="http://admin.thebase.in/items/add" target="_blank">+新規商品登録</a>
 </div>
 
 %= javascript 'js/items.js';
