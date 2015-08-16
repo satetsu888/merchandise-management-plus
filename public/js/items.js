@@ -2,6 +2,8 @@ $.jsonRPC.setup({
     endPoint: 'jsonrpc',
 });
 
+var temporaryHand;
+
 var setupSortableList = function(){
     $("#itemList").sortable();
 }
@@ -48,6 +50,25 @@ var vm = new Vue({
         updateItem: function(e){
             setItem(e.targetVM);
         },
+        grabVariations: function(e){
+            var variations = e.targetVM.$data.variations;
+            temporaryHand = variations.map(
+                function(current, index, array){
+                    current.variation_id = "";
+                    return current;
+                }
+            );
+        },
+        setVariations: function(e){
+            var current = e.targetVM.$data.variations;
+            var currentVariations = current.map(function(c,i,a){return c.variation});
+            var newVariations = $(temporaryHand).not(function(index){
+                var result = $.inArray(this.variation, currentVariations);
+                return result == -1 ? false : true;
+            }).get();
+
+            e.targetVM.$data.variations = current.concat( newVariations );
+        }
     },
     components: {
         itemComponent: {
