@@ -4,7 +4,10 @@
   <h1>商品管理＋</h1>
 </div>
 
-
+<div id="app">
+<div id="userWrapper">
+<a href="{{user.shop_url}}">{{user.shop_name}}</a>でログイン中です
+</div>
 <div id="itemListWrapper">
 <ul id="itemList" class="accordion-group">
     <template v-repeat="items">
@@ -61,6 +64,7 @@
     </template>
 </ul>
     <a href="http://admin.thebase.in/items/add" target="_blank">+新規商品登録</a>
+</div>
 </div>
 
 %= javascript 'js/items.js';

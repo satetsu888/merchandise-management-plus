@@ -18,6 +18,18 @@ var setUp = function(){
     setupSortableList();
 }
 
+var getUser = function(vm){
+    $.jsonRPC.request('getUser',{
+        params: {},
+        success: function(res){
+            vm.user = res.result.user;
+        },
+        error: function(res){
+            console.log(res);
+        }
+    });
+}
+
 var getItems = function(vm){
     $.jsonRPC.request('getItems',{
         params: {},
@@ -44,13 +56,15 @@ var setItem = function(vm){
 }
 
 var vm = new Vue({
-    el: '#itemListWrapper',
+    el: '#app',
     data: {
+        user  : {},
         items : [],
     },
     ready: function(){
         var self = this;
         getItems(self);
+        getUser(self);
     },
     methods: {
         updateItem: function(e){

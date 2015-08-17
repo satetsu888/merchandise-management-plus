@@ -4,6 +4,7 @@ use Mojo::Base 'MojoX::JSON::RPC::Service';
 my @methods = qw/
     getItems
     setItem
+    getUser
 /;
 
 use JSON;
@@ -87,5 +88,15 @@ sub flatten_variations {
 
     return \@flattend;
 };
+
+sub getUser {
+    my $self = shift;
+    my $params = shift;
+
+    my $token = Net::OAuth2::AccessToken->session_thaw($self->psession->{token}, profile => $self->auth);
+
+    my $user = $token->get('/1/users/me')->content;
+    return decode_json($user);
+}
 
 1;
