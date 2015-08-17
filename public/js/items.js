@@ -6,6 +6,12 @@ var temporaryHand;
 
 var setupSortableList = function(){
     $("#itemList").sortable();
+    $("#itemList").sortable(
+        "option", {
+            axis : "y",
+            opacity : 0.8
+        }
+    );
 }
 
 var setUp = function(){
