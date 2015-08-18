@@ -91,8 +91,12 @@ var vm = new Vue({
         }
     },
     components: {
-        itemComponent: {
+        item: {
             props: ['item'],
+            attached: function(){
+                console.log("child attached");
+                console.log(this.$data);
+            }
         },
     }
 });
