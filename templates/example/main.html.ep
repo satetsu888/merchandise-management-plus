@@ -16,7 +16,7 @@
         <div class="accordion-header">
             <a class="accordion-toggle" data-toggle="collapse" href="#item{{$index}}-body" >
                 {{list_order}}.
-                <img src={{img1_origin}} width="50px">
+                <img v-attr="src:img1_origin" width="50px">
                 {{title}}
             </a>
             <small>[{{item_id}}]</small>
