@@ -10,17 +10,17 @@
 </div>
 <div id="itemListWrapper">
 <ul id="itemList" class="accordion-group">
-    <template v-repeat="items">
-    <li class="item" >
-    <item v-item={{@ item}}>
+    <item-component v-repeat="item in items"></item-component>
+    <template id="item">
+    <li class="item">
         <div class="accordion-header">
             <a class="accordion-toggle" data-toggle="collapse" href="#item{{$index}}-body" >
-                {{list_order}}.
-                <img v-attr="src:img1_origin" width="50px">
-                {{title}}
+                {{item.list_order}}.
+                <img v-attr="src:item.img1_origin" width="50px">
+                {{item.title}}
             </a>
-            <small>[{{item_id}}]</small>
-            <input type="checkbox" v-model="visible | asBool">公開
+            <small>[{{item.item_id}}]</small>
+            <input type="checkbox" v-model="item.visible | asBool">公開
             <div class="btn-group" role="toolbar">
                 <button type="button" class="btn btn-default btn-sm" v-on="click: updateItem">
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
@@ -33,24 +33,24 @@
         <div id="item{{$index}}-body" class="accordion-body collapse">
             <div class="input-group">
                 <span class="input-group-addon">商品名</span>
-                <input type="text" class="form-control" placeholder="title" v-model="title">
+                <input type="text" class="form-control" placeholder="title" v-model="item.title">
             </div>
             <div class="input-group">
                 <span class="input-group-addon">商品説明</span>
-                <textarea class="form-control" placeholder="detail" v-model="detail"></textarea>
+                <textarea class="form-control" placeholder="detail" v-model="item.detail"></textarea>
             </div>
             <div class="input-group">
                 <span class="input-group-addon">¥</span>
-                <input type="text" v-model="price">
+                <input type="text" v-model="item.price">
             </div>
             <div class="input-group">
                 <span class="input-group-addon">在庫数</span>
                 <div class="input-group">
                     <span class="input-group-addon">合計</span>
-                    <input type="text" v-model="stock">
+                    <input type="text" v-model="item.stock">
                 </div>
                 <ul>
-                <template v-repeat="variations">
+                <template v-repeat="item.variations">
                     <li>
                         <input type="text" v-model="variation">
                         <input type="text" v-model="variation_stock">
@@ -62,18 +62,17 @@
             </div>
             <div class="input-group">
                 % for(1..5){
-                <div class="col-xs-6 col-md-3" v-if="img<%= $_ %>_origin">
+                <div class="col-xs-6 col-md-3" v-if="item.img<%= $_ %>_origin">
                     <a href="#" class="thumbnail">
-                        <img v-attr="src:img<%= $_ %>_origin" />
+                        <img v-attr="src:item.img<%= $_ %>_origin" />
                     </a>
                 </div>
                 % }
             </div>
             <div class="input-group">
-                <input type="checkbox" v-model="visible | asBool">公開
+                <input type="checkbox" v-model="item.visible | asBool">公開
             </div>
         </div>
-    </item>
     </li>
     </template>
 </ul>

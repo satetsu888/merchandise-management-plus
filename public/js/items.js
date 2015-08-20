@@ -1,3 +1,6 @@
+Vue.config.debug = true;
+Vue.config.strict = true;
+
 $.jsonRPC.setup({
     endPoint: 'jsonrpc',
 });
@@ -45,15 +48,61 @@ var getItems = function(vm){
 
 var setItem = function(vm){
     $.jsonRPC.request('setItem',{
-        params: { data: vm.$data },
+        params: { data: vm.$data.item },
         success: function(res){
-            vm.$data = res.result.item;
+            vm.$data.item = res.result.item;
         },
         error: function(res){
             console.log(res);
         }
     });
 }
+
+var itemComponent = Vue.extend({
+    template: '#item',
+    props: {
+        item: {
+            twoWay: true
+        }
+    },
+    watch: {
+        item: {
+            handler: function(val, oldVal){
+                console.log(val);
+                console.log(oldVal);
+            },
+            deep: true
+        }
+    },
+    methods: {
+        updateItem: function(e){
+            setItem(e.targetVM);
+        },
+        removeLocalChange: function(e){
+            console.log("removeLocalChange called");
+        },
+        grabVariations: function(e){
+            var variations = e.targetVM.$data.itemProp.variations;
+            temporaryHand = variations.map(
+                function(current, index, array){
+                    current.variation_id = "";
+                    return current;
+                }
+            );
+        },
+        setVariations: function(e){
+            var current = e.targetVM.$data.itemProp.variations;
+            var currentVariations = current.map(function(c,i,a){return c.variation});
+            var newVariations = $(temporaryHand).not(function(index){
+                var result = $.inArray(this.variation, currentVariations);
+                return result == -1 ? false : true;
+            }).get();
+
+            e.targetVM.$data.itemProp.variations = current.concat( newVariations );
+        }
+    }
+});
+Vue.component('itemComponent', itemComponent);
 
 var vm = new Vue({
     el: '#app',
@@ -65,39 +114,6 @@ var vm = new Vue({
         var self = this;
         getItems(self);
         getUser(self);
-    },
-    methods: {
-        updateItem: function(e){
-            setItem(e.targetVM);
-        },
-        grabVariations: function(e){
-            var variations = e.targetVM.$data.variations;
-            temporaryHand = variations.map(
-                function(current, index, array){
-                    current.variation_id = "";
-                    return current;
-                }
-            );
-        },
-        setVariations: function(e){
-            var current = e.targetVM.$data.variations;
-            var currentVariations = current.map(function(c,i,a){return c.variation});
-            var newVariations = $(temporaryHand).not(function(index){
-                var result = $.inArray(this.variation, currentVariations);
-                return result == -1 ? false : true;
-            }).get();
-
-            e.targetVM.$data.variations = current.concat( newVariations );
-        }
-    },
-    components: {
-        item: {
-            props: ['item'],
-            attached: function(){
-                console.log("child attached");
-                console.log(this.$data);
-            }
-        },
     }
 });
 

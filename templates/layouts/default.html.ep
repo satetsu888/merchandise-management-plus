@@ -4,7 +4,7 @@
         <title><%= title %></title>
         %= javascript "js/jquery-2.1.4.min.js";
         %= javascript "js/jquery.jsonrpc.js";
-        %= javascript "js/vue.min.js";
+        %= javascript "js/vue.js";
         %= javascript "//code.jquery.com/ui/1.11.4/jquery-ui.js";
         %= stylesheet "css/common.css";
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
